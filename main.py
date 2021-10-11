@@ -6,12 +6,11 @@ from pycaret.classification import load_model, predict_model
 
 
 app = FastAPI()
-db = pd.read_csv('data.csv') 
-model = load_model('final_model') 
+db = pd.read_csv('data/data.csv') 
+model = load_model('model/final_model') 
 
 
 #app objekt and use a decorator (you can use a HTTP request (GET, POST, ...)  
-#decorators: add functionality to an existing code.
 @app.get('/historical')
 def get_historical_data(): 
     js = db.to_json(orient = 'records')
@@ -20,7 +19,7 @@ def get_historical_data():
 
 @app.get('/tomorrow')
 def get_future_data(): 
-    input_data =  pd.read_csv('new_data.csv')
+    input_data =  pd.read_csv('data/new_data.csv')
     input_data.drop('cnt', axis=1, inplace=True)
     pred_df = predict_model(model, input_data)
     
